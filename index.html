@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#17251f">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="MONEY HUB">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon-192.png">
+<title>MONEY HUB</title>
+<style>
+:root{--bg:#f4f7f4;--card:#fff;--ink:#17251f;--muted:#68766e;--green:#20764d;--mint:#b9f5c9;--line:#e0e8e2;--red:#b93838}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif;padding-bottom:calc(82px + env(safe-area-inset-bottom))}
+header{background:var(--ink);color:white;padding:calc(18px + env(safe-area-inset-top)) 18px 20px;border-radius:0 0 24px 24px}
+.brand{font-size:12px;letter-spacing:2px;color:#b9c8be;font-weight:700}.balance-label{font-size:13px;color:#c9d8ce;margin-top:22px}.balance{font-size:34px;font-weight:800;margin:4px 0 16px;letter-spacing:-1px}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:10px}.stat{background:#293b32;padding:12px;border-radius:14px}.stat small{display:block;color:#c9d8ce;font-size:12px}.stat strong{display:block;margin-top:5px;font-size:17px}.pos{color:var(--mint)}.neg{color:#ffd0b8}
+main{max-width:680px;margin:auto;padding:16px}.nav{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;background:#e5ece6;padding:5px;border-radius:14px;margin-bottom:16px}.nav button{border:0;background:transparent;color:#536158;padding:11px 4px;border-radius:10px;font-weight:700}.nav button.active{background:white;color:var(--ink);box-shadow:0 1px 4px #0001}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px;margin-bottom:14px}.panel h2{font-size:18px;margin:0 0 14px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.muted{color:var(--muted);font-size:13px}.big{font-size:22px;font-weight:800;margin-top:5px}.field{margin:12px 0}.field label{display:block;font-size:13px;font-weight:700;margin-bottom:6px}.field input,.field select{width:100%;font-size:16px;padding:12px;border:1px solid #d5dfd7;border-radius:11px;background:white;color:var(--ink);min-height:45px}
+button{font:inherit;cursor:pointer}.primary{width:100%;border:0;border-radius:12px;background:var(--green);color:white;font-weight:800;padding:13px;margin-top:5px}.secondary{border:1px solid var(--line);background:white;color:var(--ink);border-radius:10px;padding:9px 12px;font-weight:700}.danger{color:var(--red)}.row{display:flex;align-items:center;gap:10px}.between{justify-content:space-between}.grow{flex:1;min-width:0}.entry{border-top:1px solid var(--line);padding:12px 0;display:flex;gap:8px;align-items:center}.entry:first-of-type{border-top:0}.entry-title{font-weight:700;overflow-wrap:anywhere}.entry-meta{font-size:12px;color:var(--muted);margin-top:3px}.entry-amount{font-weight:800;white-space:nowrap}.bar{height:8px;border-radius:10px;background:#e8eee9;overflow:hidden;margin:8px 0}.bar span{display:block;height:100%;background:#42a875}.notice{font-size:13px;color:var(--green);margin-top:10px}.empty{text-align:center;color:var(--muted);padding:22px 8px;font-size:14px}.bottom{position:fixed;bottom:0;left:0;right:0;padding:10px 16px calc(10px + env(safe-area-inset-bottom));background:#ffffffed;border-top:1px solid var(--line);backdrop-filter:blur(14px);display:flex;justify-content:center}.bottom button{max-width:648px;width:100%;border:0;background:var(--ink);color:white;border-radius:12px;padding:13px;font-weight:800}.hidden{display:none!important}.pill{display:inline-block;background:#e8f6ec;color:#20764d;padding:4px 8px;border-radius:20px;font-size:11px;font-weight:800}.foot{text-align:center;color:var(--muted);font-size:11px;padding:8px}
+</style>
+</head>
+<body>
+<header>
+  <div class="brand">◈ MONEY HUB</div>
+  <div class="balance-label">管理残高</div>
+  <div class="balance" id="balance">¥0</div>
+  <div class="stats">
+    <div class="stat"><small>記録した収入</small><strong class="pos" id="incomeTotal">+¥0</strong></div>
+    <div class="stat"><small>記録した支出</small><strong class="neg" id="expenseTotal">−¥0</strong></div>
+  </div>
+</header>
+<main>
+  <div class="nav">
+    <button class="active" data-tab="home">ホーム</button><button data-tab="money">金銭管理</button><button data-tab="wish">欲しい物</button>
+  </div>
+  <section id="homeTab">
+    <div class="grid">
+      <div class="panel"><div class="muted">欲しい物の合計</div><div class="big" id="wishTotal">¥0</div><div class="muted" id="wishCount">0件登録中</div><button class="secondary" style="margin-top:12px;width:100%" onclick="showTab('wish')">リストを見る</button></div>
+      <div class="panel"><div class="muted">月の支出予算</div><div class="big" id="budgetLabel">¥30,000</div><div class="muted" id="budgetUsage">支出 ¥0</div><button class="secondary" style="margin-top:12px;width:100%" onclick="showTab('money')">予算を管理</button></div>
+    </div>
+    <div class="panel"><h2>購入できるかチェック</h2><div class="muted">管理残高 − 欲しい物の合計</div><div class="big" id="afterWish">¥0</div><p class="muted" id="afterWishText">商品を登録すると購入後の残額を計算します。</p></div>
+    <div class="panel"><h2>最近の取引</h2><div id="recentTransactions" class="empty">まだ取引がありません。</div></div>
+    <div class="panel"><h2>データのバックアップ</h2><p class="muted">データはこの端末のブラウザに保存されます。念のため定期的にバックアップを保存してください。</p><div class="row"><button class="secondary grow" onclick="exportData()">バックアップを書き出す</button><button class="secondary grow" onclick="document.getElementById('importFile').click()">復元する</button></div><input id="importFile" class="hidden" type="file" accept="application/json,.json" onchange="importData(event)"></div>
+  </section>
+  <section id="moneyTab" class="hidden">
+    <div class="panel"><h2>残高・予算設定</h2><div class="field"><label for="startBalance">管理開始時の残高（円）</label><input id="startBalance" type="number" min="0" inputmode="numeric" placeholder="例：10000"></div><div class="field"><label for="monthlyBudget">月の支出予算（円）</label><input id="monthlyBudget" type="number" min="0" inputmode="numeric" placeholder="例：30000"></div><button class="primary" onclick="saveSettings()">設定を保存</button><div id="settingsNotice" class="notice"></div></div>
+    <div class="panel"><h2>取引を追加</h2><div class="field"><label for="kind">種類</label><select id="kind"><option value="支出">支出</option><option value="収入">収入</option></select></div><div class="field"><label for="amount">金額（円）</label><input id="amount" type="number" min="1" inputmode="numeric" placeholder="例：1200"></div><div class="field"><label for="category">カテゴリ</label><select id="category"><option>食費</option><option>日用品</option><option>趣味・ゲーム</option><option>音楽・DTM</option><option>交通費</option><option>通信費</option><option>収入・お小遣い</option><option>その他</option></select></div><div class="field"><label for="memo">メモ（任意）</label><input id="memo" maxlength="100" placeholder="例：イヤホン、昼ごはん"></div><button class="primary" onclick="addTransaction()">＋ 取引を記録する</button><div id="moneyNotice" class="notice"></div></div>
+    <div class="panel"><h2>取引履歴</h2><div id="allTransactions" class="empty">記録した取引がここに表示されます。</div></div>
+  </section>
+  <section id="wishTab" class="hidden">
+    <div class="panel"><h2>欲しい物リスト</h2><div class="muted">Amazonの商品URLを保存して、いつでも商品ページを開けます。</div><div class="big" id="wishTotalLarge">¥0</div><div class="muted" id="wishCountLarge">0件登録中</div></div>
+    <div class="panel"><h2>商品を追加</h2><div class="field"><label for="itemName">商品名</label><input id="itemName" maxlength="150" placeholder="例：ワイヤレスイヤホン"></div><div class="field"><label for="itemPrice">価格（円）</label><input id="itemPrice" type="number" min="0" inputmode="numeric" placeholder="例：5980"></div><div class="field"><label for="itemUrl">Amazonの商品URL（任意）</label><input id="itemUrl" type="url" placeholder="https://www.amazon.co.jp/dp/..."></div><button class="primary" onclick="addWish()">＋ 欲しい物を追加</button><div id="wishNotice" class="notice"></div></div>
+    <div class="panel"><h2>登録した商品</h2><div id="wishItems" class="empty">まだ商品がありません。</div></div>
+  </section>
+  <div class="foot">MONEY HUB · データはこの端末内に保存</div>
+</main>
+<div class="bottom"><button onclick="quickAdd()">＋ すばやく記録</button></div>
+<script>
+const KEY='moneyhub-v1';
+const defaults={startBalance:0,monthlyBudget:30000,transactions:[],wishes:[]};
+let state=load();
+function load(){try{return {...defaults,...JSON.parse(localStorage.getItem(KEY)||'{}')}}catch(e){return {...defaults}}}
+function save(){localStorage.setItem(KEY,JSON.stringify(state));render()}
+function yen(n){return '¥'+Number(n||0).toLocaleString('ja-JP')}
+function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function sums(){let inc=state.transactions.filter(x=>x.kind==='収入').reduce((a,x)=>a+x.amount,0);let exp=state.transactions.filter(x=>x.kind==='支出').reduce((a,x)=>a+x.amount,0);let wishes=state.wishes.reduce((a,x)=>a+x.price,0);return {inc,exp,wishes,balance:Number(state.startBalance||0)+inc-exp}}
+function showTab(t){document.querySelectorAll('.nav button').forEach(b=>b.classList.toggle('active',b.dataset.tab===t));['home','money','wish'].forEach(x=>document.getElementById(x+'Tab').classList.toggle('hidden',x!==t));document.querySelector('.bottom button').textContent=t==='money'?'＋ 取引を追加':t==='wish'?'＋ 欲しい物を追加':'＋ すばやく記録';window.scrollTo({top:0,behavior:'smooth'})}
+document.querySelectorAll('.nav button').forEach(b=>b.addEventListener('click',()=>showTab(b.dataset.tab)));
+function addTransaction(){let amount=Number(document.getElementById('amount').value);if(!Number.isFinite(amount)||amount<=0){msg('moneyNotice','金額を正しく入力してください。');return}state.transactions.push({id:crypto.randomUUID?crypto.randomUUID():String(Date.now()),kind:document.getElementById('kind').value,amount,category:document.getElementById('category').value,memo:document.getElementById('memo').value.trim(),date:new Date().toISOString()});document.getElementById('amount').value='';document.getElementById('memo').value='';msg('moneyNotice','取引を保存しました。');save()}
+function saveSettings(){let b=Number(document.getElementById('startBalance').value),m=Number(document.getElementById('monthlyBudget').value);if(b<0||m<0||!Number.isFinite(b)||!Number.isFinite(m)){msg('settingsNotice','0以上の金額を入力してください。');return}state.startBalance=b;state.monthlyBudget=m;msg('settingsNotice','設定を保存しました。');save()}
+function addWish(){let name=document.getElementById('itemName').value.trim(),priceText=document.getElementById('itemPrice').value,url=document.getElementById('itemUrl').value.trim(),price=priceText===''?0:Number(priceText);if(!name){msg('wishNotice','商品名を入力してください。');return}if(!Number.isFinite(price)||price<0){msg('wishNotice','価格を正しく入力してください。');return}if(url){try{let u=new URL(url);if(u.protocol!=='https:'||!(u.hostname==='amazon.co.jp'||u.hostname.endsWith('.amazon.co.jp'))){msg('wishNotice','https://www.amazon.co.jp/ の商品URLを入力してください。');return}}catch(e){msg('wishNotice','URLの形式を確認してください。');return}}state.wishes.push({id:crypto.randomUUID?crypto.randomUUID():String(Date.now()),name,price,url});['itemName','itemPrice','itemUrl'].forEach(id=>document.getElementById(id).value='');msg('wishNotice','欲しい物を保存しました。');save()}
+function msg(id,s){document.getElementById(id).textContent=s}
+function removeTx(id){if(confirm('この取引を削除しますか？')){state.transactions=state.transactions.filter(x=>x.id!==id);save()}}
+function removeWish(id){if(confirm('この商品を削除しますか？')){state.wishes=state.wishes.filter(x=>x.id!==id);save()}}
+function renderTx(list,container){if(!list.length){container.innerHTML='<div class="empty">記録した取引がここに表示されます。</div>';return}container.innerHTML=list.map(t=>`<div class="entry"><div class="grow"><div class="entry-title">${esc(t.memo||t.category)}</div><div class="entry-meta">${esc(t.category)} · ${esc(t.kind)} · ${t.date?new Date(t.date).toLocaleDateString('ja-JP'):''}</div></div><div class="entry-amount ${t.kind==='収入'?'pos':''}">${t.kind==='収入'?'+':'−'}${yen(t.amount)}</div><button class="secondary danger" onclick="removeTx('${esc(t.id)}')">削除</button></div>`).join('')}
+function renderWishes(){let el=document.getElementById('wishItems');if(!state.wishes.length){el.innerHTML='<div class="empty">まだ商品がありません。商品名と価格を入力して追加してください。</div>';return}el.innerHTML=state.wishes.map(w=>`<div class="entry"><div class="grow"><div class="entry-title">${esc(w.name)}</div><div class="entry-amount">${w.price?yen(w.price):'価格未設定'}</div><div class="entry-meta">${w.url?'Amazonの商品URLを保存済み':'検索リンクでAmazonを開きます'}</div><div class="row" style="margin-top:9px"><button class="secondary grow" onclick="openAmazon('${esc(w.id)}')">↗ Amazonで開く</button><button class="secondary danger" onclick="removeWish('${esc(w.id)}')">削除</button></div></div></div>`).join('')}
+function openAmazon(id){let w=state.wishes.find(x=>x.id===id);if(!w)return;let url=w.url||('https://www.amazon.co.jp/s?k='+encodeURIComponent(w.name));window.open(url,'_blank','noopener,noreferrer')}
+function render(){let s=sums();document.getElementById('balance').textContent=yen(s.balance);document.getElementById('incomeTotal').textContent='+'+yen(s.inc);document.getElementById('expenseTotal').textContent='−'+yen(s.exp);document.getElementById('wishTotal').textContent=yen(s.wishes);document.getElementById('wishTotalLarge').textContent=yen(s.wishes);document.getElementById('wishCount').textContent=state.wishes.length+'件登録中';document.getElementById('wishCountLarge').textContent=state.wishes.length+'件登録中';document.getElementById('budgetLabel').textContent=yen(state.monthlyBudget);document.getElementById('budgetUsage').textContent='支出 '+yen(s.exp);document.getElementById('afterWish').textContent=yen(s.balance-s.wishes);document.getElementById('afterWish').style.color=s.balance-s.wishes<0?'var(--red)':'var(--green)';document.getElementById('afterWishText').textContent=s.balance>=s.wishes?'登録商品をすべて買った場合の計算上の残額です。':'すべて購入するには、あと'+yen(s.wishes-s.balance)+'必要です。';let recent=document.getElementById('recentTransactions');let sorted=state.transactions.slice().reverse().slice(0,5);if(!sorted.length)recent.innerHTML='<div class="empty">まだ取引がありません。</div>';else renderTx(sorted,recent);renderTx(state.transactions.slice().reverse(),document.getElementById('allTransactions'));renderWishes();document.getElementById('startBalance').value=state.startBalance;document.getElementById('monthlyBudget').value=state.monthlyBudget}
+function quickAdd(){let active=document.querySelector('.nav button.active')?.dataset.tab;if(active==='wish'){document.getElementById('itemName').focus();document.getElementById('itemName').scrollIntoView({behavior:'smooth',block:'center'})}else if(active==='money'){document.getElementById('amount').focus();document.getElementById('amount').scrollIntoView({behavior:'smooth',block:'center'})}else showTab('money')}
+function exportData(){let blob=new Blob([JSON.stringify(state,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='money-hub-backup.json';a.click();URL.revokeObjectURL(url)}
+function importData(event){let file=event.target.files[0];if(!file)return;let r=new FileReader();r.onload=()=>{try{let x=JSON.parse(r.result);if(!Array.isArray(x.transactions)||!Array.isArray(x.wishes))throw Error();state={...defaults,...x};save();alert('バックアップを復元しました。')}catch(e){alert('このバックアップファイルは読み込めませんでした。')}event.target.value=''};r.readAsText(file)}
+if('serviceWorker' in navigator && location.protocol.startsWith('http'))navigator.serviceWorker.register('./sw.js').catch(()=>{});
+render();
+</script>
+</body>
+</html>
